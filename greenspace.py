@@ -8,7 +8,7 @@ import numpy as np
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
     page_title='Green Space Project',
-    page_icon=':deciduous_tree:', # This is an emoji shortcode. Could be a URL too.
+    page_icon='🛰️', # This is an emoji shortcode. Could be a URL too.
   
 )
 
