@@ -2,17 +2,29 @@ import streamlit as st
 import pandas as pd
 import math
 from pathlib import Path
+import rasterio
+import numpy as np
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
-    page_title='GDP dashboard',
-    page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
+    page_title='Green Space Project',
+    page_icon=':deciduous_tree:', # This is an emoji shortcode. Could be a URL too.
+  
 )
 
 # -----------------------------------------------------------------------------
 # Declare some useful functions.
 
+def readimage(filename):
+    dataset = rasterio.open(filename)
+    nir = np.array(dataset.read(1))
+    red = np.array(dataset.read(2))
+    green = np.array(dataset.read(3))
+    blue = np.array(dataset.read(4))
+    surftemp = np.array(dataset.read(5))
+    return nir, red, green, blue, surftemp
 @st.cache_data
+
 def get_gdp_data():
     """Grab GDP data from a CSV file.
 
@@ -63,13 +75,10 @@ gdp_df = get_gdp_data()
 # Draw the actual page
 
 # Set the title that appears at the top of the page.
-'''
-# :earth_americas: GDP dashboard
+st.title(":green[Green Space vs. Temperature]", text_alignment="center")
+st.write("Analyzing satellite data to find the correlation between vegetation (measured as NDVI) and surface temperature")
 
-Browse GDP data from the [World Bank Open Data](https://data.worldbank.org/) website. As you'll
-notice, the data only goes to 2022 right now, and datapoints for certain years are often missing.
-But it's otherwise a great (and did I mention _free_?) source of data.
-'''
+
 
 # Add some spacing
 ''
@@ -105,7 +114,7 @@ filtered_gdp_df = gdp_df[
     & (from_year <= gdp_df['Year'])
 ]
 
-st.header('GDP over time', divider='gray')
+st.header('How Green Space Affects Temperature', divider='gray')
 
 ''
 
